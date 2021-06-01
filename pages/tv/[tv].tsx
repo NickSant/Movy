@@ -4,7 +4,7 @@ import requests from "../../utils/requests";
 
 const API_KEY = process.env.API_KEY;
 
-const Movie = ({ result }) => {
+const TvShow = ({ result }) => {
   const baseImgUrl = "https://image.tmdb.org/t/p/original/";
 
   return (
@@ -18,7 +18,7 @@ const Movie = ({ result }) => {
 
         <div className="flex flex-col items-center sm:pl-5 sm:items-start">
           <h2 className="font-logo text-3xl mt-5 font-bold text-center sm:text-left px-10 sm:px-0">
-            {result.title}
+            {result.title || result.name}
           </h2>
           <p className="text-center text-gray-400">
             {result.genres?.map((genre) => (
@@ -57,22 +57,23 @@ const Movie = ({ result }) => {
 
 export async function getStaticPaths() {
   const res = await fetch(
-    `https://api.themoviedb.org/3${
-      requests.fetchTopRated?.url || requests.fetchTrending.url
-    }`
+    `https://api.themoviedb.org/3${requests.fetchTV?.url}`
   ).then((res) => res.json());
 
   const paths = res.results.map((result) => ({
-    params: { movie: result.id.toString() || result.external_id.toString() },
+    params: { tv: result.id.toString() || result.external_id.toString() },
   }));
 
   return { paths, fallback: "blocking" };
 }
 
 export async function getStaticProps(context: GetStaticPropsContext) {
+  console.log(context.params.tv);
   const res = await fetch(
-    `https://api.themoviedb.org/3/movie/${context.params.movie}?api_key=${API_KEY}`
+    `https://api.themoviedb.org/3/tv/${context.params.tv}?api_key=${API_KEY}`
   ).then((res) => res.json());
+
+  console.log(res);
 
   return {
     props: {
@@ -81,4 +82,4 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   };
 }
 
-export default Movie;
+export default TvShow;

@@ -32,7 +32,13 @@ const Thumbnail = forwardRef<HTMLDivElement, ThumbType>(({ result }, ref) => {
   return (
     <div
       ref={ref}
-      onClick={() => router.push(`/movie/${result.id.toString()}`)}
+      onClick={() => {
+        if (result.media_type === "tv") {
+          router.push(`/tv/${result.id.toString()}`);
+          return;
+        }
+        router.push(`/movie/${result.id.toString()}`);
+      }}
       className="group cursor-pointer transition duration-200 
       ease-in transform sm:hover:scale-105 hover:z-50"
     >
