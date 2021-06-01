@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ThumbUpIcon } from "@heroicons/react/outline";
+import { useRouter } from "next/router";
 import React, { forwardRef } from "react";
 
 interface ThumbType {
@@ -25,11 +26,13 @@ interface ThumbType {
   key: string;
 }
 const Thumbnail = forwardRef<HTMLDivElement, ThumbType>(({ result }, ref) => {
+  const router = useRouter();
   const baseURL = "https://image.tmdb.org/t/p/original/";
 
   return (
     <div
       ref={ref}
+      onClick={() => router.push(`/movie/${result.id.toString()}`)}
       className="group cursor-pointer transition duration-200 
       ease-in transform sm:hover:scale-105 hover:z-50"
     >
